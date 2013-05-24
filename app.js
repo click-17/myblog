@@ -5,13 +5,12 @@
 
 var express = require('express')
   , routes = require('./routes')
-  , user = require('./routes/user')
   , http = require('http')
   , path = require('path')
   , ejs = require('ejs')
-  //,MongoStore = require('connect-mongo')
-  ,settings = require('./settings')
   ,SessionStore = require("session-mongoose")(express);
+
+var config = require('./config').config;
   
 var store = new SessionStore({
 	url: "mongodb://192.168.62.213/session",
