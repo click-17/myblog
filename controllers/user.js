@@ -8,13 +8,13 @@ var User = require('../proxy').User;
 
 //sign up
 exports.showReg = function (req, res) {
-	res.render('reg', {
+	res.render('user/reg', {
 		title: '用户注册',
 	});
 };
 
 exports.reg = function (req, res, next) {
-  var name = sanitize(req.body.name).trim();
+  var name = sanitize(req.body.username).trim();
   name = sanitize(name).xss();
   var pass = sanitize(req.body.password).trim();
   pass = sanitize(pass).xss();
@@ -43,7 +43,7 @@ exports.reg = function (req, res, next) {
     return;
   }
 
-  User.getUsersByQuery({'$or': [{'username': username}]}, {}, function (err, users) {
+  User.getUsersByQuery({'$or': [{'name': name}]}, {}, function (err, users) {
     if (err) {
       return next(err);
     }
@@ -55,15 +55,16 @@ exports.reg = function (req, res, next) {
     // md5 the pass
     pass = md5(pass);
     // create gavatar
-    var avatar_url = 'http://www.gravatar.com/avatar/' + md5(email.toLowerCase()) + '?size=48';
+    var avatar_url = 'http://www.gravatar.com/avatar/' + '?size=48';
 
-    User.newAndSave(name, loginname, pass, email, avatar_url, false, function (err) {
+    User.newAndSave(name, pass, avatar_url, false, function (err) {
       if (err) {
         return next(err);
       }
       // 发送激活邮件
       //mail.sendActiveMail(email, md5(email + config.session_secret), name, email);
-      res.render('sign/signup', {
+      res.render('index', {
+      	title: '',
         success: '欢迎加入 ' + config.name + '！我们已给您的注册邮箱发送了一封邮件，请点击里面的链接来激活您的帐号。'
       });
     });
@@ -78,7 +79,12 @@ exports.reg = function (req, res, next) {
  */
 exports.showLogin = function (req, res) {
   req.session._loginReferer = req.headers.referer;
-  res.render('sign/signin');
+  res.render('user/login');
+};
+
+exports.testLogin = function (req, res,next) {
+  req.session._loginReferer = 'mytest';
+  next();
 };
 
 /**
@@ -88,7 +94,7 @@ exports.showLogin = function (req, res) {
 var notJump = [
   '/active_account', //active page
   '/reset_pass',     //reset password page, avoid to reset twice
-  '/signup',         //regist page
+  '/reg',         //regist page
   '/search_pass'    //serch pass page
 ];
 
@@ -100,48 +106,44 @@ var notJump = [
  * @param {Function} next
  */
 exports.login = function (req, res, next) {
-  var loginname = sanitize(req.body.name).trim().toLowerCase();
-  var pass = sanitize(req.body.pass).trim();
+  var loginname = sanitize(req.body.username).trim().toLowerCase();
+  var pass = sanitize(req.body.password).trim();
 
   if (!loginname || !pass) {
-    return res.render('sign/signin', { error: '信息不完整。' });
+    return res.render('user/login', { error: '信息不完整。' });
   }
 
-  User.getUserByLoginName(loginname, function (err, user) {
+  User.getUserByName(loginname, function (err, user) {
     if (err) {
       return next(err);
     }
     if (!user) {
-      return res.render('sign/signin', { error: '这个用户不存在。' });
+      return res.render('user/login', { error: '这个用户不存在。' });
     }
     pass = md5(pass);
-    if (pass !== user.pass) {
-      return res.render('sign/signin', { error: '密码错误。' });
+    if (pass !== user.password) {
+      return res.render('user/login', { error: '密码错误。' });
     }
-    if (!user.active) {
-      // 从新发送激活邮件
-      mail.sendActiveMail(user.email, md5(user.email + config.session_secret), user.name, user.email);
-      return res.render('sign/signin', { error: '此帐号还没有被激活，激活链接已发送到 ' + user.email + ' 邮箱，请查收。' });
-    }
-    // store session cookie
-    gen_session(user, res);
-    //check at some page just jump to home page
-    var refer = req.session._loginReferer || 'home';
-    for (var i = 0, len = notJump.length; i !== len; ++i) {
-      if (refer.indexOf(notJump[i]) >= 0) {
-        refer = 'home';
-        break;
-      }
-    }
-    res.redirect(refer);
+    req.session.user = user;
+    
+    //var refer = req.session._loginReferer || '/';
+    res.redirect('/');
   });
 };
 
+exports.checkNotLogin = function (req, res,next){
+	if (!req.session.user) {
+		return res.redirect('/login');
+	}
+	next();
+}
+
+
 // sign out
-exports.signout = function (req, res, next) {
+exports.logout = function (req, res, next) {
   req.session.destroy();
   res.clearCookie(config.auth_cookie_name, { path: '/' });
-  res.redirect(req.headers.referer || 'home');
+  res.redirect(req.headers.referer || '/');
 };
 
 

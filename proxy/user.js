@@ -62,7 +62,7 @@ exports.getUsersByIds = function (ids, callback) {
  * @param {Function} callback 回调函数
  */
 exports.getUsersByQuery = function (query, opt, callback) {
-  User.find(query, [], opt, callback);
+  User.find(query, 'name', opt, callback);
 };
 
 /**
@@ -78,9 +78,11 @@ exports.getUserByQuery = function (name, key, callback) {
   User.findOne({name: name, retrieve_key: key}, callback);
 };
 
-exports.newAndSave = function (name, pass, callback) {
+exports.newAndSave = function (name, pass, avatar_url, active, callback) {
   var user = new User();
   user.name = name;
   user.password = pass;
+  user.avatar = avatar_url;
+  user.active = false;
   user.save(callback);
 };
