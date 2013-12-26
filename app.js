@@ -2,6 +2,7 @@
 /**
  * Module dependencies.
  */
+//myblog
 
 var fs = require('fs');
 var accessLogfile = fs.createWriteStream('./log/access.log', {flags: 'a'});
