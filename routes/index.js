@@ -4,15 +4,11 @@
  */
 
 var user = require('../controllers/user');
+var post = require('../controllers/post');
 
 module.exports = function(app) {
 	//app.get('/index',user.checkNotLogin);
-	app.get('/',user.checkNotLogin, function(req, res) {
-		req.session.test = 'test';
-		res.render('index', {
-			title: '首页'
-		});
-	});
+	app.get('/',post.getAllPosts);
 	app.get('/reg', user.showReg);
 	app.post('/reg',user.reg);
 	
@@ -25,4 +21,7 @@ module.exports = function(app) {
 	
 	app.all('/logout',user.logout);
 	
+	app.get('/u/:user',post.getPosts);
+	
+	app.post('/post', post.addPost);
 };

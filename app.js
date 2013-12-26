@@ -3,6 +3,10 @@
  * Module dependencies.
  */
 
+var fs = require('fs');
+var accessLogfile = fs.createWriteStream('access.log', {flags: 'a'});
+var errorLogfile = fs.createWriteStream('error.log', {flags: 'a'});
+
 var express = require('express')
   , routes = require('./routes')
   , http = require('http')
@@ -26,7 +30,8 @@ app.set('views', __dirname + '/views');
 app.engine('.html', ejs.__express);
 app.set('view engine', 'html');// app.set('view engine', 'ejs');
 app.use(express.favicon());
-app.use(express.logger('dev'));
+//app.use(express.logger('dev'));
+app.use(express.logger({stream: accessLogfile}));
 
 /*
  var store = new SessionStore({
@@ -79,6 +84,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
+}
+
+if ('production' == app.get('env')) {
+	app.error(function (err, req, res, next) {
+		var meta = '[' + new Date() + '] ' + req.url + '\n';
+		errorLogfile.write(meta + err.stack + '\n');
+		next();
+	});
 }
 
 routes(app);//这个是新加的
