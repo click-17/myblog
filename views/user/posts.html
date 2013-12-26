@@ -1,0 +1,18 @@
+<%
+if ( typeof(posts)!='undefined' && posts) {  
+posts.forEach(function(post, index) {
+	if (index % 3 == 0) { %>
+		<div class="row">
+	<%} %>
+			<div class="span4">
+				<h2><a href="/u/<%= post.user_name %>"><%= post.user_name %></a> 说</h2>
+				<p><small><%= post.create_at %></small></p>
+				<p><%= post.content %></p>
+			</div>
+	<% if (index % 3 == 2) { %>
+		</div><!-- end row -->
+	<% } %>
+	<%}) %>
+	<% if (posts.length % 3 != 0) { %>
+	</div><!-- end row -->
+<%} }%>

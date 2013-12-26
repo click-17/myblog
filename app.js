@@ -4,7 +4,7 @@
  */
 
 var fs = require('fs');
-var accessLogfile = fs.createWriteStream('access.log', {flags: 'a'});
+var accessLogfile = fs.createWriteStream('./log/access.log', {flags: 'a'});
 var errorLogfile = fs.createWriteStream('error.log', {flags: 'a'});
 
 var express = require('express')
@@ -19,10 +19,7 @@ var express = require('express')
 
 var config = require('./config').config;
   
-//partials = require('express-partials')
-
 var app = express();
- //app.use(partials()); 
  
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -30,15 +27,8 @@ app.set('views', __dirname + '/views');
 app.engine('.html', ejs.__express);
 app.set('view engine', 'html');// app.set('view engine', 'ejs');
 app.use(express.favicon());
-//app.use(express.logger('dev'));
+//app.use(express.favicon(__dirname + '/public/images/favicon.ico'));
 app.use(express.logger({stream: accessLogfile}));
-
-/*
- var store = new SessionStore({
-	url: "mongodb://192.168.62.213/session",
-	interval: 120000
-});
-*/
 
 var store = new MongoStore({
 	db: "session",
