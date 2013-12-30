@@ -17,9 +17,19 @@ var express = require('express')
   ,MongoStore = require('connect-mongo')(express)
   //RedisStore = require("connect-redis")(express)
   ;
-
+//var Loader = require('loader');
 var config = require('./config').config;
   
+// assets
+var assets = {};
+if (config.mini_assets) {
+  try {
+    assets = JSON.parse(fs.readFileSync(path.join(__dirname, 'assets.json')));
+  } catch (e) {
+    console.log('You must execute `make build` before start app when mini_assets is true.');
+    throw e;
+  }
+}
 var app = express();
  
 // all environments

@@ -5,6 +5,8 @@
 
 var user = require('../controllers/user');
 var post = require('../controllers/post');
+var blog = require('../controllers/blog');
+//var auth = require('../middlewares/auth');
 
 module.exports = function(app) {
 	//app.get('/index',user.checkNotLogin);
@@ -24,4 +26,8 @@ module.exports = function(app) {
 	app.get('/u/:user',post.getPosts);
 	
 	app.post('/post', post.addPost);
+	
+	app.get('/b/:user',blog.getBlogs);
+	app.get('/blog',blog.createBlog);
+	app.post('/blog',blog.addBlog);
 };

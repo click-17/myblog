@@ -131,14 +131,6 @@ exports.login = function (req, res, next) {
   });
 };
 
-exports.checkNotLogin = function (req, res,next){
-	if (!req.session.user) {
-		return res.redirect('/login');
-	}
-	next();
-}
-
-
 // sign out
 exports.logout = function (req, res, next) {
   req.session.destroy();
