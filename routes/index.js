@@ -27,7 +27,8 @@ module.exports = function(app) {
 	
 	app.post('/post', post.addPost);
 	
-	app.get('/b/:user',blog.getBlogs);
-	app.get('/blog',blog.createBlog);
-	app.post('/blog',blog.addBlog);
+	app.get('/b/:user', blog.getBlogs);
+	app.get('/blog', blog.getAllBlogs);
+	app.post('/blog', blog.publishBlog);
+	app.get('/blog/create', blog.createBlog);
 };

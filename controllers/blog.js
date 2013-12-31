@@ -5,30 +5,30 @@
  * MIT Licensed
  */
 
-var Blog = require('../proxy').Blog;
+var Blog = require('../proxy/blog');
 var User = require('../proxy').User;
 var sanitize = require('validator').sanitize;
 /**
- * 获取blog.
+ * 获取某个用户的blog.
  */
-exports.getBlog = function(req,res){
+exports.getBlogs = function(req,res){
 	var username = sanitize(req.params.user).trim();
     User.getUserByName(username, function (err, user) {
 	    if (err) {
 	      return next(err);
 	    }
 	    if (!user) {
-	      return res.render('/', { error: '这个用户不存在。' });
+	      return res.render('blog/user', { error: '这个用户不存在。' });
 	    }
-   });
-   Blog.findBlogByQuery({author:username},null,function(err,blogs){
-   	 	if (err) {
-	      return next(err);
-	    }
-   	    res.render('user/user', {
-			title: username,
-			blogs: blogs,
-		});
+	      Blog.findBlogByQuery({author:username},null,function(err,blogs){
+           if (err) {
+		         return next(err);
+		       }
+		          res.render('blog/user', {
+		           title: username,
+		           blogs: blogs,
+		       });
+		  });
    });
 }
 
@@ -36,7 +36,17 @@ exports.getBlog = function(req,res){
  * 创建blog
  */
 exports.createBlog = function(req,res,next){
-	return res.render('/blog/create', { error: '这个用户不存在。' });
+	var username = sanitize(req.params.user).trim();
+    User.getUserByName(username, function (err, user) {
+	    if (err) {
+	      return next(err);
+	    }
+	    if (!user) {
+	    	res.redirect('/login');
+	      //return res.render('user/login', { error: '这个用户不存在。' });
+	    }
+   });
+	return res.render('blog/create');
 }
 
 exports.publishBlog = function(req,res,next){
@@ -56,11 +66,11 @@ exports.publishBlog = function(req,res,next){
 }
 
 /**
- * 获取用户的所有blogs
+ * 获取所有blogs
  */
-exports.getBlogs = function(req,res){
-	Blog.findPostByQuery({},null,function(err,blogs){
-		res.render('/blog/index', {
+exports.getAllBlogs = function(req,res){
+	Blog.findBlogByQuery({},null,function(err,blogs){
+		res.render('blog/index', {
 			title: '博客首页',
 			blogs: blogs,
 		});

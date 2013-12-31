@@ -23,17 +23,18 @@ exports.getPosts = function(req,res){
 	      return next(err);
 	    }
 	    if (!user) {
-	      return res.render('/', { error: '这个用户不存在。' });
+	     res.render('user/user', { error: '这个用户不存在。',ll:'rest' });
+	      return ;
 	    }
-   });
-   Post.findPostByQuery({user_name:username},null,function(err,posts){
-   	 	if (err) {
-	      return next(err);
-	    }
-   	    res.render('user/user', {
-			title: username,
-			posts: posts,
-		});
+	    Post.findPostByQuery({user_name:username},null,function(err,posts){
+	   	 	if (err) {
+		      return next(err);
+		    }
+	   	    res.render('user/user', {
+				title: username,
+				posts: posts,
+			});
+	   });
    });
 }
 

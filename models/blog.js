@@ -1,24 +1,14 @@
-/*!
- * microblog - blog models.
- * Copyright(c) 2013 ozil <ozil@gmail.com>
- * Copyright(c) 2013 ozil
- * MIT Licensed
- */
-
-/**
- * blog models.
- */
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
 mongoose.set('debug', true);
 
-var blogSchema = new Schema({
-  title:  String,
+var BlogSchema = new Schema({
   author_id:{type: ObjectId},
-  author: String,
-  body:   String,
+  title:  { type: String},
+  author: { type: String},
+  body:   { type: String},
   comments: [{ body: String, date: Date }],
   date: { type: Date, default: Date.now },
   hidden: {type: Boolean, default: false},
@@ -29,5 +19,4 @@ var blogSchema = new Schema({
   }
 });
 
-mongoose.model('Blog', blogSchema);
-
+mongoose.model('Blog', BlogSchema);

@@ -1,0 +1,18 @@
+<%
+if ( typeof(blogs)!='undefined' && blogs) {  
+blogs.forEach(function(post, index) {
+	if (index % 3 == 0) { %>
+		<div class="row">
+	<%} %>
+			<div class="span4">
+				<h2><a href="/u/<%= post.author %>"><%= post.author %></a> 说</h2>
+				<p><small><%= post.create_at %></small></p>
+				<p><%= post.body %></p>
+			</div>
+	<% if (index % 3 == 2) { %>
+		</div><!-- end row -->
+	<% } %>
+	<%}) %>
+	<% if (blogs.length % 3 != 0) { %>
+	</div><!-- end row -->
+<%} }%>

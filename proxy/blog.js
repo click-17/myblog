@@ -1,12 +1,6 @@
-/*
- * microblog - blog proxy.
- * Copyright(c) 2013 ozil <ozil@gmail.com>
- * Copyright(c) 2013 ozil
- * MIT Licensed
- */
-
-var Blog = require('../models').Blog;
-
+var models = require('../models');
+var Blog = models.Blog;
+console.log(typeof(Blog));
 /**
  * 
  * @param {String} userId
