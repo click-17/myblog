@@ -1,8 +1,12 @@
 <% include ../header.html %>
 <% if (user) { %>
-<form method="post" action="/post" class="well form-inline center" style="text-align:center;">
-	<input type="text" class="span8" name="content">
-	<button type="submit" class="btn btn-success"><i class="icon-comment icon-white"></i> 发言</button>
+<form method="post" action="/blog" class="well form-inline center" style="text-align:;">
+	<label for="title">标题</label>
+	<input type="text" class="span3" name="title">
+	<br /><br />
+	<label for="content">内容</label><br />
+	<textarea name="content" style="width: 700px; height: 350px;overflow:hidden;"></textarea><br /><br />
+	<button type="submit" class="btn btn-success"><i class="icon-comment icon-white"></i> 发表</button>
 </form>
 <% } %>
 <% include ../footer.html %>

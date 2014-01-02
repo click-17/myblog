@@ -5,7 +5,6 @@ var ObjectId = Schema.ObjectId;
 mongoose.set('debug', true);
 
 var BlogSchema = new Schema({
-  author_id:{type: ObjectId},
   title:  { type: String},
   author: { type: String},
   body:   { type: String},

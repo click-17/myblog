@@ -36,16 +36,11 @@ exports.getBlogs = function(req,res){
  * 创建blog
  */
 exports.createBlog = function(req,res,next){
-	var username = sanitize(req.params.user).trim();
-    User.getUserByName(username, function (err, user) {
-	    if (err) {
-	      return next(err);
-	    }
-	    if (!user) {
-	    	res.redirect('/login');
-	      //return res.render('user/login', { error: '这个用户不存在。' });
-	    }
-   });
+	var user= req.session.user;
+    if (!user) {
+    	res.redirect('/login');
+      //return res.render('user/login', { error: '这个用户不存在。' });
+    }
 	return res.render('blog/create');
 }
 
@@ -54,10 +49,9 @@ exports.publishBlog = function(req,res,next){
 	var title = sanitize(req.body.title).trim();
 	content = sanitize(content).xss();
 	title = sanitize(title).xss();
-	var userId = req.session.user._id.toString();
 	var userName = req.session.user.name.toString();
 	
-	Blog.newAndSave(userId, userName, content,function(err){
+	Blog.newAndSave( userName, title, content,function(err){
 		if (err) {
 			return next(err);
 		}

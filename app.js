@@ -61,7 +61,7 @@ app.use(express.cookieParser());
 app.use(express.session({
 	secret : 'shiqiliang',
 	store: store,
-	cookie: { maxAge: 900000 }
+	cookie: { maxAge: 1000 * 60 * 60 * 24 * 30 }//30 days
 }));
 
 app.use(function(req, res, next){

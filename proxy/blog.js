@@ -1,16 +1,14 @@
 var models = require('../models');
 var Blog = models.Blog;
-console.log(typeof(Blog));
 /**
  * 
  * @param {String} userId
  * @param {String} content
  * @param {Function} callback
  */
-exports.newAndSave = function(userId, userName, title,content, callback){
+exports.newAndSave = function(userName, title,content, callback){
 	var blog = new Blog();
 	blog.title = title;
-	blog.author_id = userId;
 	blog.author = userName;
 	blog.body = content;
 	blog.save(callback);

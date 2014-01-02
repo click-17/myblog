@@ -15,6 +15,7 @@ padding-bottom: 40px;
 }
 </style>
 <link href="/stylesheets/bootstrap-responsive.css" rel="stylesheet">
+<link href="/stylesheets/blog-home.css" rel="stylesheet">
 </head>
 <body>
 <div class="navbar navbar-fixed-top">
@@ -34,6 +35,8 @@ padding-bottom: 40px;
 <li><a href="/reg">注册</a></li>
 <% }else{%>
 	<li><a href="/logout">登出</a></li>
+	<li><a href="/b/<%=user.name%>">博客</a></li>
+	<li><a href="/blog/create">写博客</a></li>
 <%}%>
 </ul>
 </div>
