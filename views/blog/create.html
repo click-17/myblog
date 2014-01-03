@@ -1,11 +1,30 @@
 <% include ../header.html %>
+
 <% if (user) { %>
+	<script src="/javascripts/kindeditor/kindeditor-min.js"></script>
+	<script src="/javascripts/kindeditor/lang/zh_CN.js"></script>
+	<script>
+        KindEditor.ready(function(K) {
+                window.editor = K.create('#content',{
+                	resizeType: 2,
+                	uploadJson: '/blog/upload',
+					items : ['bold', 'italic', 'underline', 'strikethrough', 'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'formatblock', 'insertorderedlist', 'insertunorderedlist', '|','forecolor',
+				 	'hilitecolor', 'fontname', 'fontsize', '|','link', 'unlink', 'emoticons', 'shcode', 'image', 'flash', 'table', 'quote', '|', 'fullscreen', 'source', 'about'],
+				 
+					afterChange : function() {
+						this.sync();
+					},
+
+
+                });
+        });
+	</script>
 <form method="post" action="/blog" class="well form-inline center" style="text-align:;">
 	<label for="title">标题</label>
 	<input type="text" class="span3" name="title">
 	<br /><br />
 	<label for="content">内容</label><br />
-	<textarea name="content" style="width: 700px; height: 350px;overflow:hidden;"></textarea><br /><br />
+	<textarea id="content" name="content" style="width: 700px; height: 350px;overflow:hidden;"></textarea><br /><br />
 	<button type="submit" class="btn btn-success"><i class="icon-comment icon-white"></i> 发表</button>
 </form>
 <% } %>

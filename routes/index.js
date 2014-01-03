@@ -6,7 +6,7 @@
 var user = require('../controllers/user');
 var post = require('../controllers/post');
 var blog = require('../controllers/blog');
-//var auth = require('../middlewares/auth');
+var auth = require('../middlewares/auth');
 
 module.exports = function(app) {
 	//app.get('/index',user.checkNotLogin);
@@ -31,4 +31,5 @@ module.exports = function(app) {
 	app.get('/blog', blog.getAllBlogs);
 	app.post('/blog', blog.publishBlog);
 	app.get('/blog/create', blog.createBlog);
+	app.post('/blog/upload', blog.upload);
 };

@@ -8,6 +8,10 @@
 var Blog = require('../proxy/blog');
 var User = require('../proxy').User;
 var sanitize = require('validator').sanitize;
+
+var fs = require("fs"),
+    formidable = require("formidable"),
+    util = require('util');
 /**
  * 获取某个用户的blog.
  */
@@ -69,4 +73,26 @@ exports.getAllBlogs = function(req,res){
 			blogs: blogs,
 		});
 	});
+}
+
+/*
+ * 上传图片
+ */
+exports.upload = function(req,res){
+	var user= req.session.user;
+    if (!user) {
+    	res.redirect('/login');
+      //return res.render('user/login', { error: '这个用户不存在。' });
+    }
+    
+    console.log(util.inspect({req:req}));
+    res.end(util.inspect({req:req.files}));
+    /*
+    var form = new formidable.IncomingForm();
+        form.parse(req, function(err, fields, files) {
+              res.writeHead(200, {'content-type': 'text/plain'});
+              res.write('received upload:\n\n');
+              res.end(util.inspect({fields: fields, files: files}));
+        });*/
+    
 }

@@ -53,7 +53,14 @@ var store = new RedisStore({
 });*/
 
 
-app.use(express.bodyParser());
+app.use(express.bodyParser(
+	{
+		uploadDir: 'public/upload/',
+		keepExtensions: true,
+        limit: 10000000, // 10M limit
+        defer: true  //enable event      
+	}
+));
 app.use(express.methodOverride());
 app.use(express.cookieParser());
 

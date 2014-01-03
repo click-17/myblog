@@ -8,7 +8,7 @@
 /**
  * 权限验证
  */
-exports.checkNotLogin = function (req, res,next){
+exports.checkNotLogin = function (req, res, next){
 	if (!req.session.user) {
 		return res.redirect('/login');
 	}
